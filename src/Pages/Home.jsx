@@ -1,19 +1,31 @@
-import React from "react";
+import React, { useState, useEffect,  useContext } from "react";
 import Header from "../Components/Header";
 import EventDetailsCard from "../Components/EventDetailsCard";
 import Footer from "../Components/Footer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import SessionContext from "../SessionContext";
+
 
 const Home = () => {
+
   const ImageUrl = "https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg"
   const navigate = useNavigate();
 
-  const handleBillingUserSubEvent = () => {
-    navigate('/BillingUserSubEvent');
-  };
+  const { id } = useParams();
+  const { sessionData, setSessionData } = useContext(SessionContext);
 
-  const handleFullPass = () => {
-    navigate('/BillingFullPass');
+  useEffect(() => {
+    if (id && id !== sessionData.eventId) {
+      setSessionData(prev => ({ ...prev, eventId: id }));
+    }
+  }, [id, setSessionData, sessionData.eventId]);
+
+  const [passType, setPassType] = useState(null);
+
+  const handleBillingUser = (pass) => {
+    setPassType(pass);
+    setSessionData(prev => ({ ...prev, passType: pass }));
+    navigate('/BillingUser', { state: passType });
   };
 
   return (
@@ -77,7 +89,7 @@ const Home = () => {
                   </svg>
                 </div>
                 <h3 className="text-white font-bold text-lg mb-2">Date</h3>
-                <p className="text-gray-300">23 September 2025</p>
+                <p className="text-gray-300">22 Sept - 30 Sept,  2025</p>
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
@@ -89,16 +101,6 @@ const Home = () => {
                 <h3 className="text-white font-bold text-lg mb-2">Time</h3>
                 <p className="text-gray-300">6:00 PM onwards</p>
               </div>
-            </div>
-
-          
-            
-
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-              <svg className="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
             </div>
           </div>
         </div>
@@ -121,16 +123,16 @@ const Home = () => {
 
           <EventDetailsCard
             eventName="Dandiya Night Event"
-            eventVenue="City Palace Grounds, Udaipur"
-            eventDate="23 September 2025"
-            eventTime="6:00 PM - 12:00 AM"
+            eventVenue="Garden Name, Udaipur"
+            eventDate="22 - 30 September 2025"
+            eventTime="6:00 PM - 11:00 PM"
             eventDetails="Join us for an unforgettable night of traditional Gujarati folk dance, authentic costumes, live music, and delicious regional cuisine. Experience the vibrant culture and community spirit in the royal city of Udaipur."
           />
         </div>
       </section>
 
       {/* Ticket Selection Section */}
-      <section className="py-20 bg-white">
+      <section className="pb-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-purple-100 text-purple-800 rounded-full font-semibold text-sm mb-6">
@@ -147,11 +149,11 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {/* Single Event Pass */}
             <div className="group relative bg-white border-2 border-gray-200 rounded-3xl p-8 hover:border-blue-300 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="absolute -top-4 left-8">
+              {/* <div className="absolute -top-4 left-8">
                 <div className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-bold">
                   Popular Choice
                 </div>
-              </div>
+              </div> */}
               
               <div className="text-center mb-8">
                 <div className="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -160,16 +162,16 @@ const Home = () => {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Single Event Pass</h3>
-                <p className="text-gray-600 mb-6">Perfect for the main Dandiya Night celebration</p>
+                <p className="text-gray-600 mb-6">For Single Dandiya Night Event</p>
               
               </div>
 
-              <ul className="space-y-4 mb-8">
+              {/* <ul className="space-y-4 mb-8">
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>Main Dandiya Night Event</span>
+                  <span>Single Dandiya Night Event</span>
                 </li>
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -189,10 +191,10 @@ const Home = () => {
                   </svg>
                   <span>Light Snacks & Drinks</span>
                 </li>
-              </ul>
+              </ul> */}
 
               <button
-                onClick={handleBillingUserSubEvent}
+                onClick={(e) => handleBillingUser('single')}
                 className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform group-hover:scale-105 shadow-lg"
               >
                 Choose Single Pass
@@ -218,7 +220,7 @@ const Home = () => {
                 
               </div>
 
-              <ul className="space-y-4 mb-8">
+              {/* <ul className="space-y-4 mb-8">
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -243,10 +245,10 @@ const Home = () => {
                   </svg>
                   <span>Full Meals & Premium Beverages</span>
                 </li>
-              </ul>
+              </ul> */}
 
               <button
-                onClick={handleFullPass}
+                onClick={(e) => handleBillingUser('global')}
                 className="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 transform group-hover:scale-105 shadow-lg"
               >
                 Choose Full Pass

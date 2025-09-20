@@ -1,16 +1,20 @@
-import React, { useState } from 'react'
-import InputField from './InputField'
+import React, { useState, useContext } from 'react';
+import InputField from './InputField';
+import SessionContext from '../SessionContext' ;
 
-const BillingUserForm = ({ onSubmit, initialData = {} }) => {
+const BillingUserForm = ({ onSubmit }) => {
+
+  const { sessionData, updateSection } = useContext(SessionContext)
+
   const [formData, setFormData] = useState({
-    name: initialData.name || '',
-    mobileNo: initialData.mobileNo || '',
-    whatsapp: initialData.whatsapp || '',
-    email: initialData.email || '',
-    address: initialData.address || '',
-    dob: initialData.dob || '',
-    gender: initialData.gender || '',
-    ...initialData
+    name: sessionData.billingUser?.name || '',
+    mobile_no: sessionData.billingUser?.mobile_no || '',
+    whatsapp: sessionData.billingUser?.whatsapp || '',
+    email: sessionData.billingUser?.email || '',
+    address: sessionData.billingUser?.address || '',
+    dob: sessionData.billingUser?.dob || '',
+    gender: sessionData.billingUser?.gender || '',
+    event_id: sessionData.eventId || ''
   })
 
   const [errors, setErrors] = useState({})
@@ -19,77 +23,41 @@ const BillingUserForm = ({ onSubmit, initialData = {} }) => {
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-    
-    // Clear error when user starts typing
+    setFormData(prev => ({ ...prev, [name]: value }))
+    updateSection("billingUser", { [name]: value })
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }))
+      setErrors(prev => ({ ...prev, [name]: '' }))
     }
   }
 
   // Validation functions
   const validateForm = () => {
     const newErrors = {}
-
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters'
-    }
-
-    // Mobile number validation
     const mobileRegex = /^[6-9]\d{9}$/
-    if (!formData.mobileNo.trim()) {
-      newErrors.mobileNo = 'Mobile number is required'
-    } else if (!mobileRegex.test(formData.mobileNo)) {
-      newErrors.mobileNo = 'Enter valid 10-digit mobile number'
-    }
-
-    // WhatsApp validation (optional but if provided, should be valid)
-    if (formData.whatsapp && !mobileRegex.test(formData.whatsapp)) {
-      newErrors.whatsapp = 'Enter valid 10-digit WhatsApp number'
-    }
-
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Enter a valid email address'
-    }
 
-    // Address validation
-    if (!formData.address.trim()) {
-      newErrors.address = 'Address is required'
-    } else if (formData.address.trim().length < 10) {
-      newErrors.address = 'Address must be at least 10 characters'
-    }
+    if (!formData.name.trim()) newErrors.name = 'Name is required'
+    else if (formData.name.trim().length < 2) newErrors.name = 'Name must be at least 2 characters'
 
-    // Date of birth validation
-    if (!formData.dob) {
-      newErrors.dob = 'Date of birth is required'
-    } else {
+    if (!formData.mobile_no.trim()) newErrors.mobile_no = 'Mobile number is required'
+    else if (!mobileRegex.test(formData.mobile_no)) newErrors.mobile_no = 'Enter valid 10-digit mobile number'
+
+    if (formData.whatsapp && !mobileRegex.test(formData.whatsapp))
+      newErrors.whatsapp = 'Enter valid 10-digit WhatsApp number'
+
+    if (!formData.email.trim()) newErrors.email = 'Email is required'
+    else if (!emailRegex.test(formData.email)) newErrors.email = 'Enter a valid email address'
+
+    if (!formData.address.trim()) newErrors.address = 'Address is required'
+    else if (formData.address.trim().length < 10) newErrors.address = 'Address must be at least 10 characters'
+
+    if (!formData.dob) newErrors.dob = 'Date of birth is required'
+    else {
       const today = new Date()
       const birthDate = new Date(formData.dob)
       const age = today.getFullYear() - birthDate.getFullYear()
-      
-      if (age < 13 || age > 100) {
-        newErrors.dob = 'Age must be between 13 and 100 years'
-      }
+      if (age < 13 || age > 100) newErrors.dob = 'Age must be between 13 and 100 years'
     }
-
-    // Gender validation
-    if (!formData.gender) {
-      newErrors.gender = 'Please select your gender'
-    }
-
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -101,16 +69,15 @@ const BillingUserForm = ({ onSubmit, initialData = {} }) => {
 
     if (validateForm()) {
       try {
+        updateSection("billingUser", formData)
         if (onSubmit) {
           await onSubmit(formData)
         }
-        // Form submitted successfully
         console.log('Form submitted:', formData)
       } catch (error) {
         console.error('Submission error:', error)
       }
     }
-
     setIsSubmitting(false)
   }
 
@@ -188,8 +155,8 @@ const BillingUserForm = ({ onSubmit, initialData = {} }) => {
                       <input
                         type="radio"
                         name="gender"
-                        value={option.toLowerCase()}
-                        checked={formData.gender === option.toLowerCase()}
+                        value={option}
+                        checked={formData.gender === option}
                         onChange={handleChange}
                         className="sr-only"
                       />
@@ -231,12 +198,12 @@ const BillingUserForm = ({ onSubmit, initialData = {} }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InputField
                 label="Mobile Number"
-                name="mobileNo"
+                name="mobile_no"
                 type="tel"
                 placeholder="9876543210"
-                value={formData.mobileNo}
+                value={formData.mobile_no}
                 onChange={handleChange}
-                error={errors.mobileNo}
+                error={errors.mobile_no}
                 required
                 helperText="10-digit mobile number without +91"
                 icon={({ className }) => (

@@ -9,23 +9,13 @@ const EventDetailsCard = ({
 }) => {
   return (
     <div className="relative group">
-      
-      
+
       {/* Main Card */}
       <div className="mt-4 relative bg-white ">
-        
-        
-
         {/* Event Details */}
-        <div className="p-8 space-y-6">
+        <div className="pt-8 space-y-6">
           {/* Event Name with Gradient Text */}
           <div className="space-y-2">
-            <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 mb-3">
-              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Upcoming Event
-            </div>
             <h3 className="text-4xl font-semibold   ">
               {eventName}
             </h3>
@@ -80,13 +70,6 @@ const EventDetailsCard = ({
                   <p className="text-sm font-bold text-emerald-700 mb-1 uppercase tracking-wide">Time</p>
                   <p className="text-gray-900 font-semibold text-lg leading-snug">{eventTime}</p>
                 </div>
-                {/* Status Badge */}
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center px-3 py-1 bg-green-100 rounded-full">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
-                    <span className="text-xs font-semibold text-green-700">Live</span>
-                  </div>
-                </div>
               </div>
               {/* Decorative Elements */}
               <div className="absolute top-2 right-16 w-6 h-6 bg-emerald-300/20 rounded-full blur-sm"></div>
@@ -112,4 +95,4 @@ const EventDetailsCard = ({
   )
 }
 
-export default EventDetailsCard
+export default EventDetailsCard;

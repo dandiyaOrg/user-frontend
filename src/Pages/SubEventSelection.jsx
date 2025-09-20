@@ -1,61 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { getSubEvents } from "../api";
+import SessionContext from "../SessionContext"; 
 
 const SubEventSelection = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { billingData } = location.state || {}
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const { sessionData } = useContext(SessionContext);
+  const billingData = sessionData.billingUser
+  const eventId = sessionData.eventId; 
+  const billingUserId = sessionData.billingUser?.billing_user_id;
   
   const [selectedEvents, setSelectedEvents] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Sample sub-events data
-  const subEvents = [
-    {
-      id: 'workshop-a',
-      name: 'React Workshop',
-      description: 'Learn advanced React patterns and best practices',
-      date: 'March 15, 2025',
-      time: '9:00 AM - 12:00 PM',
-      price: 299,
-      seats: 50,
-      bookedSeats: 12,
-      image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=300'
-    },
-    {
-      id: 'workshop-b',
-      name: 'Node.js Masterclass',
-      description: 'Backend development with Node.js and Express',
-      date: 'March 15, 2025',
-      time: '2:00 PM - 5:00 PM',
-      price: 399,
-      seats: 40,
-      bookedSeats: 8,
-      image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=300'
-    },
-    {
-      id: 'workshop-c',
-      name: 'Database Design',
-      description: 'SQL and NoSQL database design principles',
-      date: 'March 16, 2025',
-      time: '10:00 AM - 1:00 PM',
-      price: 199,
-      seats: 60,
-      bookedSeats: 25,
-      image: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=300'
-    },
-    {
-      id: 'workshop-d',
-      name: 'AI & Machine Learning',
-      description: 'Introduction to AI and ML concepts',
-      date: 'March 16, 2025',
-      time: '3:00 PM - 6:00 PM',
-      price: 499,
-      seats: 35,
-      bookedSeats: 30,
-      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=300'
-    }
-  ]
+  const [subEvents, setSubEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => { 
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        console.log('eid', eventId)
+        const response = await getSubEvents(eventId, billingUserId);
+        console.log("response", response);
+        setSubEvents(response.data); 
+      } catch (error) {
+        if (error.response) {
+          console.error("Server error:", error);
+          console.error("Server error:", error.response.data);
+        } else {
+          console.error("Error:", error.message);
+        }
+      }finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <p>Loading subevents...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
+
 
   const handleEventSelection = (eventId) => {
     setSelectedEvents(prev => {
@@ -102,18 +91,13 @@ const SubEventSelection = () => {
     }
   }
 
-  if (!billingData) {
-    navigate('/BillingUserSubEvent')
-    return null
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Select Sub Events</h1>
-          <p className="text-blue-100">Choose the workshops and sessions you'd like to attend</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Select Sub Event</h1>
+          <p className="text-blue-100">Choose the Event you'd like to attend</p>
         </div>
 
         {/* Billing Summary */}
