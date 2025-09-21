@@ -1,0 +1,54 @@
+const calculateTotal = () => {
+    return selectedEvents.reduce((total, eventId) => {
+      const event = subEvents.find(e => e.id === eventId)
+      return total + (event?.price || 0)
+    }, 0)
+  }
+
+
+
+const handleProceedToPayment = async () => {
+    if (selectedEvents.length === 0) {
+      alert('Please select at least one event')
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      const selectedEventDetails = selectedEvents.map(eventId => 
+        subEvents.find(e => e.id === eventId)
+      )
+
+      // Navigate to payment with all data
+      navigate('/payment', {
+        state: {
+          billingData,
+          selectedEvents: selectedEventDetails,
+          totalAmount: calculateTotal(),
+          passType: 'sub-events'
+        }
+      })
+    } catch (error) {
+      console.error('Error proceeding to payment:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+
+<div className="flex justify-between items-center pt-4 border-t-2 border-gray-200">
+    <span className="text-xl font-bold text-gray-900">Total Amount</span>
+    <span className="text-2xl font-bold text-blue-600">₹{calculateTotal()}</span>
+</div>
+
+<button
+    onClick={handleProceedToPayment}
+    disabled={selectedEvents.length === 0 || isSubmitting}
+    className={`px-8 py-3 font-bold rounded-xl transition-all duration-200 ${
+        selectedEvents.length === 0 || isSubmitting
+        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 shadow-lg'
+    }`}
+    >
+    {isSubmitting ? 'Processing...' : `Proceed to Payment (₹${calculateTotal()})`}
+</button>

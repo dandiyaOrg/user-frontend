@@ -73,7 +73,6 @@ const BillingUserForm = ({ onSubmit }) => {
         if (onSubmit) {
           await onSubmit(formData)
         }
-        console.log('Form submitted:', formData)
       } catch (error) {
         console.error('Submission error:', error)
       }

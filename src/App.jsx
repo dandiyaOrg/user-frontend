@@ -18,8 +18,8 @@ const App = () => {
         <Routes>
           <Route path="/:id" element={<Home />} />
           <Route path="/BillingUser" element={<BillingUser/>} />
-          <Route path="/BillingFullPass" element={<BillingFullPass />} />
           <Route path="/SubEventSelection" element={<SubEventSelection />} />
+          <Route path="/GlobalPass" element={<BillingFullPass />} />
           <Route path="/payment" element={<Payment />} />
         </Routes>
       </ScrollToTop>

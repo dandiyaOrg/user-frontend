@@ -6,49 +6,39 @@ import api from "../api";
 
 const BillingUser = () => {
   const navigate = useNavigate()
-
-  const { sessionData } = useContext(SessionContext);
+  const { sessionData, setSessionData } = useContext(SessionContext);
 
   const handleFormSubmit = async (formData) => {
-  try {
-    console.log('Billing form data:', formData);
-
-    const response = await api.post("/billingUser/create", formData);
-
-    console.log("API response:", response);
-
-    const billingId = response.data.data.billingUser.billing_user_id;
-    
-    const billingDataWithId = {
-      ...formData,
-      billing_user_id: billingId,
-    };
-
-    if (sessionData.passType === 'single') {
-      navigate("/SubEventSelection", {
-        state: {
-          billingUser: billingDataWithId,
-          fromBilling: true,
-        },
-      });
-    } else if (sessionData.passType === "global") {
-      navigate("/GlobalEventSelection", {
-        state: {
-          billingUser: billingDataWithId,
-          fromBilling: true,
-        },
-      });
-    } else {
-      console.warn("Unknown passType, staying on same page.");
-    }
-  } catch (error) {
-    if (error.response) {
-      console.error("Server error:", error.response.data);
-    } else {
-      console.error("Error:", error.message);
-    }
+    try {
+      const response = await api.post("/billingUser/create", formData);
+      const billingUser = response.data.data.billingUser;
+      setSessionData(prev => ({ ...prev, billingUser: billingUser }));
+      
+      if (sessionData.passType === 'single') {
+        navigate("/SubEventSelection", {
+          state: {
+            billingUser,
+            fromBilling: true,
+            },
+          });
+        } else if (sessionData.passType === "global") {
+          navigate("/GlobalPass", {
+            state: {
+              billingUser,
+              fromBilling: true,
+            },
+         });
+        } else {
+          console.warn("Unknown passType, staying on same page.");
+        }
+      } catch (error) {
+        if (error.response) {
+          console.error("Server error:", error.response.data);
+        } else {
+          console.error("Error:", error.message);
+        }
+      }
   }
-}
 
 
   return (

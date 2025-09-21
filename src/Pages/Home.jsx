@@ -5,7 +5,6 @@ import Footer from "../Components/Footer";
 import { useNavigate, useParams } from "react-router-dom";
 import SessionContext from "../SessionContext";
 
-
 const Home = () => {
 
   const ImageUrl = "https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg"
@@ -20,12 +19,10 @@ const Home = () => {
     }
   }, [id, setSessionData, sessionData.eventId]);
 
-  const [passType, setPassType] = useState(null);
 
   const handleBillingUser = (pass) => {
-    setPassType(pass);
     setSessionData(prev => ({ ...prev, passType: pass }));
-    navigate('/BillingUser', { state: passType });
+    navigate('/BillingUser');
   };
 
   return (

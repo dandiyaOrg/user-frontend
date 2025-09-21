@@ -7,10 +7,8 @@ const BillingFullPass = () => {
 
   const handleFormSubmit = async (formData) => {
     try {
-      // Process the form data
       console.log('Full Pass Billing form data:', formData)
       
-      // For Full Pass - go directly to payment with all festival access
       navigate('/payment', { 
         state: { 
           billingData: formData,

@@ -7,6 +7,7 @@ const initialState = {
   passType: '',
   eventId: '',
   billingUser: {},
+  subevents: {},
   order: {},
   orderItems: {},
   attendees: {},
