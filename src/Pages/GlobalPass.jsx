@@ -1,8 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import BillingUserForm from '../Components/BillingUserForm'
 
-const BillingFullPass = () => {
+const GlobalPass = () => {
   const navigate = useNavigate()
 
   const handleFormSubmit = async (formData) => {
@@ -66,9 +65,8 @@ const BillingFullPass = () => {
         </div>
       </div>
 
-      <BillingUserForm onSubmit={handleFormSubmit} />
     </div>
   )
 }
 
-export default BillingFullPass
+export default GlobalPass;

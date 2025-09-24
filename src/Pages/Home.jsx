@@ -10,7 +10,7 @@ const Home = () => {
   const ImageUrl = "https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg"
   const navigate = useNavigate();
 
-  const { id } = useParams();
+  const id = import.meta.env.VITE_ID;  
   const { sessionData, setSessionData } = useContext(SessionContext);
 
   useEffect(() => {
@@ -39,8 +39,7 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/40 to-blue-900/60"></div>
         </div>
 
-        {/* Header */}
-        <Header className="absolute top-0 left-0 w-full z-50 bg-transparent" />
+        
 
         {/* Hero Content */}
         <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
@@ -253,11 +252,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Footer*/}
-      <Footer/>
-      
+      </section>      
     </div>
   );
 };

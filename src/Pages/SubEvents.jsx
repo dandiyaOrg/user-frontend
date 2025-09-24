@@ -9,7 +9,7 @@ const SubEventSelection = () => {
   const navigate = useNavigate();
   const { sessionData, setSessionData } = useContext(SessionContext);
 
-  const billingData = sessionData.billingUser
+  const billingData = sessionData.billingUser;
   const eventId = sessionData.eventId; 
   
   const [subEvents, setSubEvents] = useState([]);
@@ -22,6 +22,7 @@ const SubEventSelection = () => {
       try {
         setLoading(true);
         const response = await getSubEvents(eventId, billingData.billing_user_id);
+        console.log(response)
         setSessionData(prev => ({...prev, subevents: response.data}));
         setSubEvents(response.data); 
       } catch (error) {

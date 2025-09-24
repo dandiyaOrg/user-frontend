@@ -15,7 +15,7 @@ const BillingUser = () => {
       setSessionData(prev => ({ ...prev, billingUser: billingUser }));
       
       if (sessionData.passType === 'single') {
-        navigate("/SubEventSelection", {
+        navigate("/SubEvents", {
           state: {
             billingUser,
             fromBilling: true,

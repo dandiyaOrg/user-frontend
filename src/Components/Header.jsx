@@ -1,14 +1,19 @@
-import React from 'react'
+// components/Header.jsx
+import React from "react";
 
 const Header = () => {
   return (
-    <div className="absolute top-0 left-0 w-full z-10 bg-transparent ">
-      <div className='m-3 w-fit text-4xl font-semibold text-white px-5 py-3 backdrop-blur-sm
-      rounded-2xl border border-amber-50 '>
-        LOGO
+    <header className="w-full fixed top-0 left-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-200 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-start">
+        {/* Replace with your logo */}
+        <img
+          src="./src/assets/logo.png"
+          alt="Logo"
+          className="h-12 w-auto transition-transform duration-300 hover:scale-110 cursor-pointer"
+        />
       </div>
-    </div>
-  )
-}
+    </header>
+  );
+};
 
-export default Header
+export default Header;
