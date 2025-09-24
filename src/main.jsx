@@ -11,6 +11,7 @@ import SubEvents from "./Pages/SubEvents";
 import SinglePass from "./Pages/SinglePass";
 import GlobalPass from "./Pages/GlobalPass";
 import Payment from "./Pages/Payment";
+import Attendees from './Pages/Attendees';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
         <Route path="/SubEvents" element={<SubEvents />} />
         <Route path="/SinglePass" element={<SinglePass />} />
         <Route path="/GlobalPass" element={<GlobalPass />} />
+        <Route path="/Attendees" element={<Attendees />} />
         <Route path="/payment" element={<Payment />} />
       </Route>
     </>

@@ -82,9 +82,8 @@ const BillingUserForm = ({ onSubmit }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-8">
 
-      <Header/>
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 mb-8">
         <h2 className="text-3xl font-bold text-white mb-2">Billing Information</h2>

@@ -7,9 +7,9 @@ import { Calendar, MapPin, ExternalLink } from 'lucide-react';
 
 const SubEventSelection = () => {
   const navigate = useNavigate();
-  const { sessionData, setSessionData } = useContext(SessionContext);
+  const { sessionData } = useContext(SessionContext);
 
-  const billingData = sessionData.billingUser;
+  const billingUser = sessionData.billingUser;
   const eventId = sessionData.eventId; 
   
   const [subEvents, setSubEvents] = useState([]);
@@ -21,9 +21,7 @@ const SubEventSelection = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await getSubEvents(eventId, billingData.billing_user_id);
-        console.log(response)
-        setSessionData(prev => ({...prev, subevents: response.data}));
+        const response = await getSubEvents(eventId, billingUser.billing_user_id);
         setSubEvents(response.data); 
       } catch (error) {
         setError(true);
@@ -40,6 +38,10 @@ const SubEventSelection = () => {
 
     fetchData();
   }, []);
+
+  const handleSubeventClick = (subevent) => {
+    navigate("/SinglePass", { state: { subevent } });
+  }
 
   if (loading) return <IsLoading />;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -59,15 +61,15 @@ const SubEventSelection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>
               <span className="text-gray-600">Name:</span>
-              <span className="ml-2 font-semibold text-gray-900">{billingData.name}</span>
+              <span className="ml-2 font-semibold text-gray-900">{billingUser.name}</span>
             </div>
             <div>
               <span className="text-gray-600">Email:</span>
-              <span className="ml-2 font-semibold text-gray-900">{billingData.email}</span>
+              <span className="ml-2 font-semibold text-gray-900">{billingUser.email}</span>
             </div>
             <div>
               <span className="text-gray-600">Mobile:</span>
-              <span className="ml-2 font-semibold text-gray-900">{billingData.mobile_no}</span>
+              <span className="ml-2 font-semibold text-gray-900">{billingUser.mobile_no}</span>
             </div>
           </div>
         </div>
@@ -80,7 +82,7 @@ const SubEventSelection = () => {
               <div 
                 key={subevent.subevent_id}
                 className="group relative bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden cursor-pointer transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:-translate-y-2"
-                onClick={() => {}}
+                onClick={(e) => {handleSubeventClick(subevent)}}
               >
                 {/* Background Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

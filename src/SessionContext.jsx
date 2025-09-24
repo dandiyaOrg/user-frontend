@@ -7,11 +7,7 @@ const initialState = {
   passType: '',
   eventId: '',
   billingUser: {},
-  subevents: {},
-  order: {},
-  orderItems: {},
   attendees: {},
-  transaction: {}
 };
 
 export function SessionProvider({ children }) {
