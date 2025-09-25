@@ -46,15 +46,22 @@ const Home = () => {
           <div className="text-center max-w-6xl mx-auto">
             {/* Main Headline */}
             <div className="mb-8">
-              <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6">
+              {/* <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6">
                 <svg className="w-5 h-5 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
                 <span className="text-white font-semibold text-sm">Featured Event of the Year</span>
+              </div> */}
+              <div className="max-w-7xl mx-auto px-6 py-3 flex justify-center">
+                <img
+                  src="./src/assets/logo.png"
+                  alt="Logo"
+                  className="h-12 w-auto transition-transform duration-300 hover:scale-110 cursor-pointer"
+                />
               </div>
               
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight">
-                <span className="block">DANDIYA</span>
+                <span className="block">RK GARBA</span>
                 <span className="block bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
                   NIGHT
                 </span>
@@ -85,7 +92,7 @@ const Home = () => {
                   </svg>
                 </div>
                 <h3 className="text-white font-bold text-lg mb-2">Date</h3>
-                <p className="text-gray-300">22 Sept - 30 Sept,  2025</p>
+                <p className="text-gray-300">28 Sept - 30 Sept,  2025</p>
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
@@ -95,7 +102,7 @@ const Home = () => {
                   </svg>
                 </div>
                 <h3 className="text-white font-bold text-lg mb-2">Time</h3>
-                <p className="text-gray-300">6:00 PM onwards</p>
+                <p className="text-gray-300">7:00 PM onwards</p>
               </div>
             </div>
           </div>
@@ -119,11 +126,18 @@ const Home = () => {
 
           <EventDetailsCard
             eventName="Dandiya Night Event"
-            eventVenue="Garden Name, Udaipur"
-            eventDate="22 - 30 September 2025"
-            eventTime="6:00 PM - 11:00 PM"
+            eventVenue="Arihant Vatika, Shobaghpura, Udaipur"
+            eventDate="28 - 30 September 2025"
+            eventTime="7:00 PM ONWARDS"
             eventDetails="Join us for an unforgettable night of traditional Gujarati folk dance, authentic costumes, live music, and delicious regional cuisine. Experience the vibrant culture and community spirit in the royal city of Udaipur."
           />
+        </div>
+      </section>
+
+      <section className="pb-20 bg-gray-50">
+        <div className="flex justify-center items-center gap-40">
+          <img src="./src/assets/poster_1.jpg" className="h-96 object-cover rounded-lg" alt="Image 1" />
+          <img src="./src/assets/poster_2.png" className="h-96 object-cover rounded-lg" alt="Image 2" />
         </div>
       </section>
 
@@ -212,7 +226,7 @@ const Home = () => {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Full Festival Pass</h3>
-                <p className="text-gray-600 mb-6">Complete 9-day cultural festival experience</p>
+                <p className="text-gray-600 mb-6">Complete 3-day cultural festival experience</p>
                 
               </div>
 

@@ -12,6 +12,10 @@ import SinglePass from "./Pages/SinglePass";
 import GlobalPass from "./Pages/GlobalPass";
 import Payment from "./Pages/Payment";
 import Attendees from './Pages/Attendees';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
+import RefundPolicy from './Pages/RefundPolicy';
+import TermsConditions from './Pages/TermsConditions';
+import CookiePolicy from './Pages/CookiePolicy';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +28,10 @@ const router = createBrowserRouter(
         <Route path="/GlobalPass" element={<GlobalPass />} />
         <Route path="/Attendees" element={<Attendees />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsConditions />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
       </Route>
     </>
 ));

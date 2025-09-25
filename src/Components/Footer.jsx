@@ -13,11 +13,15 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="w-full md:w-1/2 lg:w-1/3 flex flex-col  justify-between">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-lg">L</span>
+              <div className="w-10 h-10rounded-xl flex items-center justify-center">
+                <img
+                  src="./src/assets/logo.png"
+                  alt="Logo"
+                  className="h-12 w-auto transition-transform duration-300 hover:scale-110 cursor-pointer"
+                />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
-                LOGO
+                RK GARBA NIGHT
               </span>
             </div>
             <p className="text-gray-400 mb-6 leading-relaxed">
@@ -89,7 +93,7 @@ const Footer = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <span className="text-gray-400 text-sm">Udaipur, Rajasthan</span>
+                <span className="text-gray-400 text-sm">Arihant Vatika, Shobaghpura, Udaipur</span>
               </div>
               
               <div className="flex items-center space-x-3">
@@ -98,17 +102,17 @@ const Footer = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
-                <span className="text-gray-400 text-sm">+91 98765 43210</span>
+                <span className="text-gray-400 text-sm">+91 9649843966</span>
               </div>
               
-              <div className="flex items-center space-x-3">
+              {/* <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
                   <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
                 </div>
                 <span className="text-gray-400 text-sm">events@example.com</span>
-              </div>
+              </div> */}
             </div>
 
             {/* Newsletter Signup */}
@@ -123,25 +127,31 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <div className="text-gray-400 text-sm">
-              © {currentYear} Events & Culture. All rights reserved.
+              © {currentYear} RK GARBA NIGHT. All rights reserved.
             </div>
 
             {/* Legal Links */}
             <div className="flex items-center space-x-6 text-sm">
               <Link 
-                to="/privacy" 
+                to="/privacy-policy" 
                 className="text-gray-400 hover:text-white transition-colors duration-200"
               >
                 Privacy Policy
               </Link>
               <Link 
-                to="/terms" 
+                to="/refund-policy" 
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+              >
+                Refund Policy
+              </Link>
+              <Link 
+                to="/terms-and-conditions" 
                 className="text-gray-400 hover:text-white transition-colors duration-200"
               >
                 Terms of Service
               </Link>
               <Link 
-                to="/cookies" 
+                to="/cookie-policy" 
                 className="text-gray-400 hover:text-white transition-colors duration-200"
               >
                 Cookie Policy
