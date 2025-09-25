@@ -5,5 +5,5 @@ import Poster2 from './poster_2.png';
 export {
     Logo,
     Poster1,
-    Poster2
+    Poster2,
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect,  useContext } from "react";
 import EventDetailsCard from "../Components/EventDetailsCard";
 import { useNavigate, useParams } from "react-router-dom";
 import SessionContext from "../SessionContext";
-import { Poster1, Poster2 } from '../assets/index'
+import { Logo, Poster1, Poster2 } from '../assets/index'
 
 const Home = () => {
 
@@ -53,7 +53,7 @@ const Home = () => {
               </div> */}
               <div className="max-w-7xl mx-auto px-6 py-3 flex justify-center">
                 <img
-                  src="./src/assets/logo.png"
+                  src={Logo}
                   alt="Logo"
                   className="h-12 w-auto transition-transform duration-300 hover:scale-110 cursor-pointer"
                 />
