@@ -9,16 +9,53 @@ function SinglePass() {
   const navigate = useNavigate();
   const { sessionData } = useContext(SessionContext);
 
+  const obj = [
+    {
+      "pass_id": "bc779043-e071-4cb0-9eb9-f44e5d986ec5",
+      "category": "Group",
+      "total_price": "7999.00",
+      "final_price": "6499.00",
+      "discount_percentage": 20
+    },
+    {
+      "pass_id": "8d9f28a6-42a1-4f7f-b91f-7ac548dbde77",
+      "category": "Stag Male",
+      "total_price": "1999.00",
+      "final_price": "1499.00",
+      "discount_percentage": 25
+    },
+    {
+      "pass_id": "1c2d94b1-8e5b-4f64-9f58-ff8dcd771234",
+      "category": "Stag Female",
+      "total_price": "1499.00",
+      "final_price": "999.00",
+      "discount_percentage": 33
+    },
+    {
+      "pass_id": "7f1b02e9-21f5-4b6c-a90a-4b27a1cfc345",
+      "category": "Couple",
+      "total_price": "2999.00",
+      "final_price": "2299.00",
+      "discount_percentage": 23
+    }
+  ]
+
   const { state } = location;
   const subevent = state?.subevent || {};
   const billingUser = sessionData.billingUser;
+  // const [passes, setPasses] = React.useState(obj);
   const [passes, setPasses] = React.useState(state?.subevent?.passes || []);
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedQuantities, setSelectedQuantities] = useState({});
-  const MAX_TOTAL_PASSES = 5;
+  const MAX_TOTAL_PASSES = 10;
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const totalSelected = passes.reduce((sum, p) => {
     const qty = selectedQuantities[p.pass_id] || 0;
+    if (p.category === "Group") {
+      return sum + qty * 10;  
+    }
     if (p.category === "Couple") {
       return sum + qty * 2;  
     }
@@ -34,20 +71,43 @@ function SinglePass() {
   });
 
   const handleQuantityChange = (passId, newQuantity) => {
+    const passObj = passes.find(p => p.pass_id === passId);
+    const isGroup = passObj.category === "Group";
+
+    // Check existing selections
+    const hasGroupSelected = Object.entries(selectedQuantities).some(([id, qty]) => {
+      const p = passes.find(pp => pp.pass_id === id);
+      return qty > 0 && p?.category === "Group";
+    });
+
+    const hasSinglesSelected = Object.entries(selectedQuantities).some(([id, qty]) => {
+      const p = passes.find(pp => pp.pass_id === id);
+      return qty > 0 && (p?.category === "Stag Male" || p?.category === "Stag Female" || p?.category === "Couple");
+    });
+
+    if (isGroup && hasSinglesSelected && newQuantity > 0) {
+      setErrorMessage("❌ You cannot select Group pass with Stag/Couple passes.");
+      return;
+    }
+    if (!isGroup && hasGroupSelected && newQuantity > 0) {
+      setErrorMessage("❌ You cannot select Stag/Couple passes with Group pass.");
+      return;
+    }
+
+    // If no error, clear message
+    setErrorMessage("");
+
+    // Update state
     setSelectedQuantities((prev) => {
-      // remove pass if quantity = 0
       if (newQuantity === 0) {
         const updated = { ...prev };
         delete updated[passId];
         return updated;
       }
-      return {
-        ...prev,
-        [passId]: newQuantity,
-      };
+      return { ...prev, [passId]: newQuantity };
     });
-    console.log("Selected Quantities:", selectedPassesArray);
   };
+
 
   const handleNext = () => {
     setIsSubmitting(true); 
@@ -107,30 +167,67 @@ function SinglePass() {
           </div>
         </div>
 
-        {/* Passes */}
-        <div className="grid grid-cols-1 gap-y-6 mb-8">
-          {passes.map((pass) => {
+        {errorMessage && (
+          <div className="bg-red-100 text-red-700 border border-red-400 px-4 py-2 rounded-lg mb-6">
+            {errorMessage}
+          </div>
+        )}
 
-            return (
-              <div key={pass.pass_id} >
-                <Pass
-                  key={pass.pass_id}
-                  passId={pass.pass_id}
-                  name={pass.category}
-                  price={pass.total_price}
-                  final_price={pass.final_price}
-                  discountPercent={pass.discount_percentage}
-                  category={pass.category}
-                  date={subevent.date}
-                  quantity={selectedQuantities[pass.pass_id] || 0}
-                  onQuantityChange={handleQuantityChange}
-                  maxTotal={MAX_TOTAL_PASSES}
-                  totalSelected={totalSelected}
-                />
-              </div>
-            )
-          })}
+        {/* Passes */}
+        {/* Group Pass Section */}
+        <div className="mb-10">
+          <h3 className="text-2xl font-bold mb-4">Group Pass</h3>
+          {passes.filter((p) => p.category === "Group").map((pass) => (
+            <Pass
+              key={pass.pass_id}
+              passId={pass.pass_id}
+              name={pass.category}
+              price={pass.total_price}
+              final_price={pass.final_price}
+              discountPercent={pass.discount_percentage}
+              category={pass.category}
+              date={subevent.date}
+              quantity={selectedQuantities[pass.pass_id] || 0}
+              onQuantityChange={handleQuantityChange}
+              maxTotal={MAX_TOTAL_PASSES}
+              totalSelected={totalSelected}
+              errorMessage={errorMessage}
+            />
+          ))}
         </div>
+
+        {/* Divider */}
+        <div className="relative my-8">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-3 bg-gray-50 text-gray-500">OR</span>
+          </div>
+        </div>
+
+        {/* Single/Couple Passes Section */}
+        <div>
+          <h3 className="text-2xl font-bold mb-4">Single / Couple Passes</h3>
+          {passes.filter((p) => p.category !== "Group" && p.category !== "Full Group").map((pass) => (
+            <Pass
+              key={pass.pass_id}
+              passId={pass.pass_id}
+              name={pass.category}
+              price={pass.total_price}
+              final_price={pass.final_price}
+              discountPercent={pass.discount_percentage}
+              category={pass.category}
+              date={subevent.date}
+              quantity={selectedQuantities[pass.pass_id] || 0}
+              onQuantityChange={handleQuantityChange}
+              maxTotal={MAX_TOTAL_PASSES}
+              totalSelected={totalSelected}
+              errorMessage={errorMessage}
+            />
+          ))}
+        </div>
+
 
         <div className="pt-8 border-t border-gray-200">
             <button

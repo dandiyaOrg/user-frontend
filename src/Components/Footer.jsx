@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Logo } from '../assets/index'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -7,7 +8,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="max-w-7xl mx-auto px-4 pt-16 pb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
           
           {/* Brand Section */}
@@ -15,7 +16,7 @@ const Footer = () => {
             <div className="flex items-center space-x-3 mb-6">
               <div className="w-10 h-10rounded-xl flex items-center justify-center">
                 <img
-                  src="./src/assets/logo.png"
+                  src={Logo}
                   alt="Logo"
                   className="h-12 w-auto transition-transform duration-300 hover:scale-110 cursor-pointer"
                 />
@@ -24,9 +25,12 @@ const Footer = () => {
                 RK GARBA NIGHT
               </span>
             </div>
-            <p className="text-gray-400 mb-6 leading-relaxed">
+            <p className="text-gray-400 mb-2 leading-relaxed">
               Experience the magic of cultural celebrations and traditional events. 
               Join us for unforgettable moments and authentic experiences.
+            </p>
+            <p className="text-gray-400 mb-6 leading-relaxed">
+              Organized by Orchidea Events LLP
             </p>
             
             {/* Social Media Links */}
@@ -82,7 +86,7 @@ const Footer = () => {
          
           {/* Contact & Newsletter */}
           <div>
-            <h3 className="text-lg font-bold text-white mb-6">Stay Connected</h3>
+            <h3 className="text-lg font-bold text-white mb-3">Stay Connected</h3>
             
             {/* Contact Info */}
             <div className="space-y-4 mb-6">
@@ -105,18 +109,15 @@ const Footer = () => {
                 <span className="text-gray-400 text-sm">+91 9649843966</span>
               </div>
               
-              {/* <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center">
                   <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                   </svg>
                 </div>
-                <span className="text-gray-400 text-sm">events@example.com</span>
-              </div> */}
+                <span className="text-gray-400 text-sm">Rkskyrise@gmail.com</span>
+              </div>
             </div>
-
-            {/* Newsletter Signup */}
-            
           </div>
         </div>
       </div>

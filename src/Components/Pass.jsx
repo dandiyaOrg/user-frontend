@@ -16,7 +16,7 @@ const getDescription = (category, date) => {
     case "Couple":
       return `Valid for couple entry on ${formattedDate}`;
     case "Group":
-      return `Valid for group entry on ${formattedDate}`;
+      return `Valid for total 10 person entry on ${formattedDate}`;
     case "Full Pass":
       return `Valid for all subevents`;
     default:
@@ -35,7 +35,8 @@ export const Pass = ({
   quantity,
   onQuantityChange,
   maxTotal,
-  totalSelected
+  totalSelected,
+  errorMessage
 }) => {
 
   const increase = () => {
@@ -49,7 +50,7 @@ export const Pass = ({
   };
 
   return (
-    <div className="w-[95vw] sm:w-[80vw] md:w-[60vw] max-w-6xl mx-auto border border-black rounded-2xl bg-white/70 shadow-md p-6 transition-all">
+    <div className="w-[95vw] sm:w-[80vw] md:w-[60vw] max-w-6xl mx-auto border border-black rounded-2xl bg-white/70 shadow-md p-6 transition-all mb-4">
       {/* Upper Part */}
       <div>
         <h2 className="text-3xl font-semibold text-gray-800">{name}</h2>
@@ -90,9 +91,9 @@ export const Pass = ({
             </div>
 
             {/* ⚠️ New line added */}
-            {totalSelected >= maxTotal && (
+            {errorMessage && (
                 <p className="text-xs text-red-600 mt-1">
-                You cannot add more passes
+                  {errorMessage}
                 </p>
             )}
             </div>

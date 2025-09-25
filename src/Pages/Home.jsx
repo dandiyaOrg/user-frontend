@@ -134,7 +134,7 @@ const Home = () => {
       </section>
 
       <section className="pb-20 bg-gray-50">
-        <div className="flex justify-center items-center gap-40">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-10 md:gap-40">
           <img src={Poster1} className="h-96 object-cover rounded-lg" alt="Image 1" />
           <img src={Poster2} className="h-96 object-cover rounded-lg" alt="Image 2" />
         </div>
