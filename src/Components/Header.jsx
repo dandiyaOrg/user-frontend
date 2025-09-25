@@ -1,5 +1,6 @@
 // components/Header.jsx
 import React from "react";
+import { Logo } from '../assets/index'
 
 const Header = () => {
   return (
@@ -7,7 +8,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-6 py-3 flex justify-start">
         {/* Replace with your logo */}
         <img
-          src="./src/assets/logo.png"
+          src={Logo}
           alt="Logo"
           className="h-12 w-auto transition-transform duration-300 hover:scale-110 cursor-pointer"
         />

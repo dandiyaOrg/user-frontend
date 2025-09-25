@@ -1,9 +1,8 @@
 import React, { useState, useEffect,  useContext } from "react";
-import Header from "../Components/Header";
 import EventDetailsCard from "../Components/EventDetailsCard";
-import Footer from "../Components/Footer";
 import { useNavigate, useParams } from "react-router-dom";
 import SessionContext from "../SessionContext";
+import { Poster1, Poster2 } from '../assets/index'
 
 const Home = () => {
 
@@ -136,8 +135,8 @@ const Home = () => {
 
       <section className="pb-20 bg-gray-50">
         <div className="flex justify-center items-center gap-40">
-          <img src="./src/assets/poster_1.jpg" className="h-96 object-cover rounded-lg" alt="Image 1" />
-          <img src="./src/assets/poster_2.png" className="h-96 object-cover rounded-lg" alt="Image 2" />
+          <img src={Poster1} className="h-96 object-cover rounded-lg" alt="Image 1" />
+          <img src={Poster2} className="h-96 object-cover rounded-lg" alt="Image 2" />
         </div>
       </section>
 
