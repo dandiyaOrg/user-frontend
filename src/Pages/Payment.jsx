@@ -8,10 +8,9 @@ const Payment = () => {
 
   if (!billingData) {
     navigate('/')
-    return null
   }
 
-  const isFullPass = passType === 'full-festival'
+  const isFullPass = true
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

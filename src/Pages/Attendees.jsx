@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaMale, FaFemale } from 'react-icons/fa';
 
 function Attendees() {
   const location = useLocation();
+  const navigate = useNavigate();
   const state = location?.state || {};
   const selectedPasses = state.selectedPasses || [];
   const [sendAllToEmail, setSendAllToEmail] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Parse pass types into sections
   const getRows = () => {
@@ -21,7 +23,7 @@ function Attendees() {
 
   // Helper to render input row
   const AttendeeRow = ({ icon, label, idx, skipEmail, showGender }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 py-3 border border-gray-200 rounded-xl px-4 hover:shadow-md transition-shadow duration-200">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[auto_1fr_1fr_1fr_1fr] gap-4 py-3 border border-gray-200 rounded-xl px-4 hover:shadow-md transition-shadow duration-200">
     {/* Icon or Gender */}
     {icon ? (
       <div className="flex items-center">{icon}</div>
@@ -76,7 +78,12 @@ function Attendees() {
       />
     )}
   </div>
-);
+    );
+
+  const handleNext = () => {
+    setIsSubmitting(true);
+    navigate("/payment");
+  }
 
 
   return (
@@ -187,6 +194,31 @@ function Attendees() {
             </div>
         </div>
         )}
+
+        <div className="pt-8 border-t border-gray-200">
+            <button
+              type="submit"
+              onClick={handleNext}
+              disabled={isSubmitting}
+              className={`w-full py-4 px-8 rounded-xl font-bold text-white transition-all duration-200 transform ${
+                isSubmitting
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-2xl'
+              }`}
+            >
+              {isSubmitting ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <span>Processing...</span>
+                </div>
+              ) : (
+                'Add Passes to Order'
+              )}
+            </button>
+          </div>
     </div>
 
   );

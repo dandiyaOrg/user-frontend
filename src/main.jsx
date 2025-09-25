@@ -28,6 +28,8 @@ const router = createBrowserRouter(
         <Route path="/GlobalPass" element={<GlobalPass />} />
         <Route path="/Attendees" element={<Attendees />} />
         <Route path="/payment" element={<Payment />} />
+
+        // EXTRA PAGES
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsConditions />} />
