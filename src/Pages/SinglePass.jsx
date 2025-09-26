@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SessionContext from '../SessionContext' ;
 import { Pass } from '../Components/Pass';
+import { convertDate } from "../utils/dateConverter.js";
 
 function SinglePass() {
 
@@ -152,7 +153,7 @@ function SinglePass() {
             </div>
             <div>
               <span className="text-gray-600">Date</span>
-              <span className="ml-2 font-semibold text-gray-900">{subevent.date}</span>
+              <span className="ml-2 font-semibold text-gray-900">{convertDate(subevent.date)}</span>
             </div>
             <div>
               <span className="text-gray-600">Venue</span>

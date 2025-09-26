@@ -2,11 +2,11 @@ import React, { useState, useEffect,  useContext } from "react";
 import EventDetailsCard from "../Components/EventDetailsCard";
 import { useNavigate, useParams } from "react-router-dom";
 import SessionContext from "../SessionContext";
-import { Logo, Poster1, Poster2 } from '../assets/index'
+import { Logo, Poster1, Poster2, banner } from '../assets/index'
 
 const Home = () => {
 
-  const ImageUrl = "https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg"
+  const ImageUrl = {banner}
   const navigate = useNavigate();
 
   const id = import.meta.env.VITE_ID;  
@@ -31,9 +31,9 @@ const Home = () => {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <img
-            src={ImageUrl}
+            src={banner}
             alt="Event Background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/40 to-blue-900/60"></div>
         </div>
