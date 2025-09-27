@@ -1,19 +1,37 @@
 // PaymentStatus.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { verifyTransaction, createSinglePasses, createGlobalPasses } from "../api";
+import SessionContext from "../SessionContext";
 
 const PaymentStatus = () => {
+  
+  const { sessionData, setSessionData } = useContext(SessionContext);
+  const { transactionId } = req.query;
   const [status, setStatus] = useState("pending"); 
 
   useEffect(() => {
-    // Simulate API call for confirmation
-    const timer = setTimeout(() => {
-      // Replace with your actual API call
-      const isSuccess = Math.random() < 0.5; 
-      setStatus(isSuccess ? "success" : "failed");
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    const verifyPayment = async () => {
+      try {
+        const response = await verifyTransaction(transactionId); 
+        const order_id = response.order_id;  
+        if (response.status === "success") {
+            setStatus("success");
+            if (sessionData.passType === 'single') {
+              await createSinglePasses(order_id);
+            } else if (sessionData.passType === 'global') {
+              await createGlobalPasses(order_id);
+            }
+        } else {       
+            setStatus("failed");
+        }
+      } catch (error) {
+        console.error("Error verifying transaction:", error);
+        setStatus("failed");
+      } 
+    };
+    verifyPayment();
   }, []);
 
   return (

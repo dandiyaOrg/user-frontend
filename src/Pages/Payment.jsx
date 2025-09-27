@@ -34,7 +34,8 @@ const Payment = () => {
       console.log("Payload for Full Pass:", payload);
       const response = await createGlobalPassOrder(payload);
       console.log("Response from Global Pass Order:", response);
-      navigate("/payment/result");
+      const url = response.data.redirectUrl;
+      window.location.href = url;
     } catch (error) {
       if (error.response) {
         console.error("Server error:", error.response.data);
@@ -58,7 +59,8 @@ const Payment = () => {
       console.log("Payload for Full Pass:", payload);
       const response = await createPassOrder(payload);
       console.log("Response from Subevent Pass Order:", response);
-      navigate("/payment/result");
+      const url = response.data.redirectUrl;
+      window.location.href = url;
     } catch (error) {
       if (error.response) {
         console.error("Server error:", error.response.data);
@@ -76,6 +78,7 @@ const Payment = () => {
     } else  {
       NORMALPASS();
     } 
+
   }
 
   return (

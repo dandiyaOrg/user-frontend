@@ -28,4 +28,19 @@ export const createGlobalPassOrder = async (data) => {
   return res.data;
 }
 
+export const verifyTransaction = async (transactionId) => {
+  const res = await api.get(`/payment/status?transactionId=${transactionId}`);
+  return res.data;
+}
+
+export const createSinglePasses = async (order_id) => {
+  const res = await api.post('/billingUser/issue-passes', { order_id });
+  return res.data;
+}
+
+export const createGlobalPasses = async (order_id) => {
+  const res = await api.post('/billingUser/issue-global-passes', { order_id });
+  return res.data;
+}
+
 export default api;
