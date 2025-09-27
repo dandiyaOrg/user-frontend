@@ -14,9 +14,11 @@ const Payment = () => {
   const passes = state?.selectedPasses;
   const attendees = state?.attendees;
   const sendAllToBilling = state?.sendAllToEmail;
-  const GRAND_TOTAL = passes?.reduce((sum, p) => {
-    return sum + (p.pass.final_price * p.quantity);
-  }, 0) || 0;
+  // const GRAND_TOTAL = passes?.reduce((sum, p) => {
+  //   return sum + (p.pass.final_price * p.quantity);
+  // }, 0) || 0;
+
+  const GRAND_TOTAL = 1;
   
   const isFullPass = sessionData.passType === 'global' ? true : false;  
 
