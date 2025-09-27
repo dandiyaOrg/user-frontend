@@ -12,27 +12,40 @@ const PaymentStatus = () => {
   const [status, setStatus] = useState("pending"); 
 
   useEffect(() => {
-    const verifyPayment = async () => {
-      try {
-        const response = await verifyTransaction(transactionId); 
-        const order_id = response.order_id;  
-        if (response.status === "success") {
-            setStatus("success");
-            if (sessionData.passType === 'single') {
-              await createSinglePasses(order_id);
-            } else if (sessionData.passType === 'global') {
-              await createGlobalPasses(order_id);
-            }
-        } else {       
-            setStatus("failed");
+  let intervalId;
+
+  const verifyPayment = async () => {
+    try {
+      const response = await verifyTransaction(transactionId);
+      const order_id = response.order_id;
+
+      if (response.status === "success") {
+        setStatus("success");
+        clearInterval(intervalId); // stop checking
+        if (sessionData.passType === "single") {
+          await createSinglePasses(order_id);
+        } else if (sessionData.passType === "global") {
+          await createGlobalPasses(order_id);
         }
-      } catch (error) {
-        console.error("Error verifying transaction:", error);
+      } else if (response.status === "failed") {
         setStatus("failed");
-      } 
-    };
-    verifyPayment();
-  }, []);
+        clearInterval(intervalId); // stop checking
+      }
+      // If response is still pending, keep retrying
+    } catch (error) {
+      console.error("Error verifying transaction:", error);
+      setStatus("failed");
+      clearInterval(intervalId);
+    }
+  };
+
+  // check every 5 seconds
+  intervalId = setInterval(verifyPayment, 5000);
+
+  // cleanup on unmount
+  return () => clearInterval(intervalId);
+    }, [transactionId, sessionData]);
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6">
