@@ -20,9 +20,9 @@ const PaymentStatus = () => {
   const verifyPayment = async () => {
     try {
       const response = await verifyTransaction(transactionId);
-      const order_id = response.order_id;
+      const order_id = response.data.orderId;
 
-      if (response.status === "success") {
+      if (response.data.status === "success") {
         setStatus("success");
         clearInterval(intervalId); // stop checking
         if (sessionData.passType === "single") {
@@ -30,7 +30,7 @@ const PaymentStatus = () => {
         } else if (sessionData.passType === "global") {
           await createGlobalPasses(order_id);
         }
-      } else if (response.status === "failed") {
+      } else if (response.data.status === "failure") {
         setStatus("failed");
         clearInterval(intervalId); // stop checking
       }
