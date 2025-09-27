@@ -7,7 +7,7 @@ import { Calendar, MapPin, ExternalLink } from 'lucide-react';
 
 const SubEventSelection = () => {
   const navigate = useNavigate();
-  const { sessionData } = useContext(SessionContext);
+  const { sessionData, setSessionData } = useContext(SessionContext);
 
   const billingUser = sessionData.billingUser;
   const eventId = sessionData.eventId; 
@@ -40,6 +40,7 @@ const SubEventSelection = () => {
   }, []);
 
   const handleSubeventClick = (subevent) => {
+    setSessionData(prev => ({ ...prev, subevent: subevent }));
     navigate("/SinglePass", { state: { subevent } });
   }
 

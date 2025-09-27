@@ -19,7 +19,8 @@ function Attendees() {
     const stagMale = selectedPasses.find(sp => sp.pass.category.toLowerCase() === 'stag male')?.quantity || 0;
     const stagFemale = selectedPasses.find(sp => sp.pass.category.toLowerCase() === 'stag female')?.quantity || 0;
     const coupleRows = selectedPasses.find(sp => sp.pass.category.toLowerCase() === 'couple')?.quantity || 0;
-    const group = selectedPasses.find(sp => sp.pass.category.toLowerCase() === 'group')?.quantity || 0;
+    const groupUnits = selectedPasses.find(sp => sp.pass.category.toLowerCase() === 'group')?.quantity || 0;
+    const group = groupUnits * 10;
     return { stagMale, stagFemale, coupleRows, group };
   };
 
@@ -67,7 +68,13 @@ function Attendees() {
     if (!validateForm()) return;
     setIsSubmitting(true);
     console.log("Submitting attendees:", attendees);
-    navigate("/payment", { state: { attendees } });
+    navigate("/payment", { 
+      state: { 
+        attendees: attendees, 
+        selectedPasses: selectedPasses, 
+        sendAllToEmail: sendAllToEmail 
+      } 
+    });
   };
 
   useEffect(() => {
@@ -83,7 +90,7 @@ function Attendees() {
             whatsapp: "",
             email: "",
             dob: "",
-            gender: "male",
+            gender: "Male",
             pass_id: sp.pass.pass_id, // ✅ store pass_id
           };
         });
@@ -99,7 +106,7 @@ function Attendees() {
             whatsapp: "",
             email: "",
             dob: "",
-            gender: "female",
+            gender: "Female",
             pass_id: sp.pass.pass_id,
           };
         });
@@ -115,7 +122,7 @@ function Attendees() {
             whatsapp: "",
             email: "",
             dob: "",
-            gender: "male",
+            gender: "Male",
             pass_id: sp.pass.pass_id,
           };
           initial[`couple_female-${idx + 1}`] = {
@@ -123,7 +130,7 @@ function Attendees() {
             whatsapp: "",
             email: "",
             dob: "",
-            gender: "female",
+            gender: "Female",
             pass_id: sp.pass.pass_id,
           };
         });
@@ -133,8 +140,12 @@ function Attendees() {
     selectedPasses
       .filter(sp => sp.pass.category.toLowerCase() === "group")
       .forEach(sp => {
-        Array.from({ length: sp.quantity }).forEach((_, idx) => {
-          initial[`group-${idx + 1}`] = {
+        const members = sp.quantity * 10;
+        let startIndex = Object.keys(initial).filter(k => k.startsWith('group-')).length;
+
+        for (let i = 0; i < members; i++) {
+          const idx = startIndex + i + 1;
+          initial[`group-${idx}`] = {
             name: "",
             whatsapp: "",
             email: "",
@@ -142,7 +153,7 @@ function Attendees() {
             gender: "",
             pass_id: sp.pass.pass_id,
           };
-        });
+        }
       });
 
     setAttendees(initial);
@@ -270,7 +281,7 @@ function Attendees() {
                 <AttendeeRow
                   key={key}
                   rowKey={key}
-                  icon={null} // no icon
+                  icon={null} 
                   label="group"
                   idx={idx + 1}
                   skipEmail={sendAllToEmail}

@@ -13,4 +13,19 @@ export const getSubEvents = async (eventId, billingUserId) => {
   return res.data;
 };
 
+export const getGlobalPasses = async (billingUserId, eventId) => {
+  const res = await api.post('/event/details/global', { billingUserId, eventId });
+  return res.data;
+}
+
+export const createPassOrder = async (data) => {
+  const res = await api.post('/billingUser/order/create', data);
+  return res.data;
+}
+
+export const createGlobalPassOrder = async (data) => {
+  const res = await api.post('/billingUser/order/global/create', data);
+  return res.data;
+}
+
 export default api;

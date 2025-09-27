@@ -9,7 +9,7 @@ function AttendeeRow({ rowKey, icon, label, idx, skipEmail, showGender, updateAt
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[auto_1fr_1fr_1fr_1fr] gap-4 py-3 border border-gray-200 rounded-xl px-4 hover:shadow-md transition-shadow duration-200">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[auto_1fr_1fr_1fr] gap-4 py-3 border border-gray-200 rounded-xl px-4 hover:shadow-md transition-shadow duration-200">
       {/* Icon or Gender */}
       {icon ? (
         <div className="flex items-center">{icon}</div>
@@ -20,9 +20,9 @@ function AttendeeRow({ rowKey, icon, label, idx, skipEmail, showGender, updateAt
           className="px-3 py-2 border border-gray-300 rounded-lg w-full"
         >
           <option value="">Select Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
         </select>
       ) : null}
       {errors?.gender && <span className="text-red-500 text-sm">{errors.gender}</span>}
@@ -37,17 +37,6 @@ function AttendeeRow({ rowKey, icon, label, idx, skipEmail, showGender, updateAt
         />
         {errors?.name && <span className="text-red-500 text-sm">{errors.name}</span>}
       </div>
-
-      {/* DOB */}
-      <input
-        name="dob"
-        placeholder="Enter Date of Birth"
-        type="text"
-        onChange={handleChange}
-        onFocus={(e) => (e.target.type = "date")}
-        onBlur={(e) => !e.target.value && (e.target.type = "text")}
-        className="px-3 py-2 border border-gray-300 rounded-lg w-full"
-      />
 
       {/* Whatsapp */}
       <div>

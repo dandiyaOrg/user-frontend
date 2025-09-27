@@ -10,42 +10,10 @@ function SinglePass() {
   const navigate = useNavigate();
   const { sessionData } = useContext(SessionContext);
 
-  const obj = [
-    {
-      "pass_id": "bc779043-e071-4cb0-9eb9-f44e5d986ec5",
-      "category": "Group",
-      "total_price": "7999.00",
-      "final_price": "6499.00",
-      "discount_percentage": 20
-    },
-    {
-      "pass_id": "8d9f28a6-42a1-4f7f-b91f-7ac548dbde77",
-      "category": "Stag Male",
-      "total_price": "1999.00",
-      "final_price": "1499.00",
-      "discount_percentage": 25
-    },
-    {
-      "pass_id": "1c2d94b1-8e5b-4f64-9f58-ff8dcd771234",
-      "category": "Stag Female",
-      "total_price": "1499.00",
-      "final_price": "999.00",
-      "discount_percentage": 33
-    },
-    {
-      "pass_id": "7f1b02e9-21f5-4b6c-a90a-4b27a1cfc345",
-      "category": "Couple",
-      "total_price": "2999.00",
-      "final_price": "2299.00",
-      "discount_percentage": 23
-    }
-  ]
-
   const { state } = location;
   const subevent = state?.subevent || {};
   const billingUser = sessionData.billingUser;
-  // const [passes, setPasses] = React.useState(obj);
-  const [passes, setPasses] = React.useState(state?.subevent?.passes || []);
+  const [passes, setPasses] = useState(state?.subevent?.passes || []);
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const MAX_TOTAL_PASSES = 10;
@@ -73,48 +41,75 @@ function SinglePass() {
 
   const handleQuantityChange = (passId, newQuantity) => {
     const passObj = passes.find(p => p.pass_id === passId);
-    const isGroup = passObj.category === "Group";
+    if (!passObj) return;
 
-    // Check existing selections
-    const hasGroupSelected = Object.entries(selectedQuantities).some(([id, qty]) => {
+    // Build prospective selected quantities object
+    const prospective = { ...selectedQuantities };
+    if (newQuantity === 0) {
+      delete prospective[passId];
+    } else {
+      prospective[passId] = newQuantity;
+    }
+
+    // Determine if group vs singles/couple selection conflict exists (based on prospective selection)
+    const hasGroupSelected = Object.entries(prospective).some(([id, qty]) => {
       const p = passes.find(pp => pp.pass_id === id);
       return qty > 0 && p?.category === "Group";
     });
 
-    const hasSinglesSelected = Object.entries(selectedQuantities).some(([id, qty]) => {
+    const hasSinglesSelected = Object.entries(prospective).some(([id, qty]) => {
       const p = passes.find(pp => pp.pass_id === id);
-      return qty > 0 && (p?.category === "Stag Male" || p?.category === "Stag Female" || p?.category === "Couple");
+      return qty > 0 && ["Stag Male", "Stag Female", "Couple"].includes(p?.category);
     });
 
-    if (isGroup && hasSinglesSelected && newQuantity > 0) {
-      setErrorMessage("❌ You cannot select Group pass with Stag/Couple passes.");
-      return;
-    }
-    if (!isGroup && hasGroupSelected && newQuantity > 0) {
-      setErrorMessage("❌ You cannot select Stag/Couple passes with Group pass.");
+    if (hasGroupSelected && hasSinglesSelected) {
+      setErrorMessage("❌ You cannot mix Group passes with Stag/Couple passes.");
       return;
     }
 
-    // If no error, clear message
+    // Helper to compute weight for a given category per single unit
+    const unitWeight = (cat) => {
+      if (cat === "Group") return 10;
+      if (cat === "Couple") return 2;
+      return 1;
+    };
+
+    // Compute prospective total (using weights)
+    const prospectiveTotal = passes.reduce((sum, p) => {
+      const qty = prospective[p.pass_id] || 0;
+      return sum + qty * unitWeight(p.category);
+    }, 0);
+
+    if (prospectiveTotal > MAX_TOTAL_PASSES) {
+      setErrorMessage(`❌ Maximum total allowed is ${MAX_TOTAL_PASSES} people/passes. Your selection counts as ${prospectiveTotal}.`);
+      return;
+    }
+
+    // All good -> clear error and update selected quantities
     setErrorMessage("");
-
-    // Update state
-    setSelectedQuantities((prev) => {
-      if (newQuantity === 0) {
-        const updated = { ...prev };
-        delete updated[passId];
-        return updated;
-      }
-      return { ...prev, [passId]: newQuantity };
-    });
+    setSelectedQuantities(prospective);
   };
 
 
+
   const handleNext = () => {
-    setIsSubmitting(true); 
+    setIsSubmitting(true);
+    if (selectedPassesArray.length === 0) {
+      setErrorMessage("⚠️ Please select at least one pass before proceeding.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Clear error if valid
+    setErrorMessage(""); 
     console.log("state ", selectedPassesArray);
     navigate("/Attendees", { state: { selectedPasses: selectedPassesArray } });
   }
+
+  const hasGroup = passes.some(p => p.category === "Group");
+  const hasSinglesOrCouple = passes.some(
+    p => ["Stag Male", "Stag Female", "Couple"].includes(p.category)
+  );
 
   console.log("SinglePass state:", state);
 
@@ -176,65 +171,72 @@ function SinglePass() {
 
         {/* Passes */}
         {/* Group Pass Section */}
-        <div className="mb-10">
-          <h3 className="text-2xl font-bold mb-4">Group Pass</h3>
-          {passes.filter((p) => p.category === "Group").map((pass) => (
-            <Pass
-              key={pass.pass_id}
-              passId={pass.pass_id}
-              name={pass.category}
-              price={pass.total_price}
-              final_price={pass.final_price}
-              discountPercent={pass.discount_percentage}
-              category={pass.category}
-              date={subevent.date}
-              quantity={selectedQuantities[pass.pass_id] || 0}
-              onQuantityChange={handleQuantityChange}
-              maxTotal={MAX_TOTAL_PASSES}
-              totalSelected={totalSelected}
-              errorMessage={errorMessage}
-            />
+        {passes.filter((p) => p.category === "Group").map((pass) => (
+            <div className="mb-10" key={pass.pass_id}>
+              <h3 className="text-2xl font-bold mb-4">Group Pass</h3>
+                <Pass
+                  key={pass.pass_id}
+                  passId={pass.pass_id}
+                  name={pass.category}
+                  price={pass.total_price}
+                  final_price={pass.final_price}
+                  discountPercent={pass.discount_percentage}
+                  category={pass.category}
+                  date={subevent.date}
+                  quantity={selectedQuantities[pass.pass_id] || 0}
+                  onQuantityChange={handleQuantityChange}
+                  maxTotal={MAX_TOTAL_PASSES}
+                  totalSelected={totalSelected}
+                  errorMessage={errorMessage}
+                  is_global={false}
+                  />
+            </div>
           ))}
-        </div>
 
         {/* Divider */}
-        <div className="relative my-8">
+        {hasGroup && hasSinglesOrCouple && (<div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-3 bg-gray-50 text-gray-500">OR</span>
           </div>
-        </div>
+        </div>)}
 
         {/* Single/Couple Passes Section */}
-        <div>
-          <h3 className="text-2xl font-bold mb-4">Single / Couple Passes</h3>
           {passes.filter((p) => p.category !== "Group" && p.category !== "Full Group").map((pass) => (
-            <Pass
-              key={pass.pass_id}
-              passId={pass.pass_id}
-              name={pass.category}
-              price={pass.total_price}
-              final_price={pass.final_price}
-              discountPercent={pass.discount_percentage}
-              category={pass.category}
-              date={subevent.date}
-              quantity={selectedQuantities[pass.pass_id] || 0}
-              onQuantityChange={handleQuantityChange}
-              maxTotal={MAX_TOTAL_PASSES}
-              totalSelected={totalSelected}
-              errorMessage={errorMessage}
-            />
+          <div key={pass.pass_id}>
+            <h3 className="text-2xl font-bold mb-4">Single / Couple Passes</h3>
+              <Pass
+                key={pass.pass_id}
+                passId={pass.pass_id}
+                name={pass.category}
+                price={pass.total_price}
+                final_price={pass.final_price}
+                discountPercent={pass.discount_percentage}
+                category={pass.category}
+                date={subevent.date}
+                quantity={selectedQuantities[pass.pass_id] || 0}
+                onQuantityChange={handleQuantityChange}
+                maxTotal={MAX_TOTAL_PASSES}
+                totalSelected={totalSelected}
+                errorMessage={errorMessage}
+                is_global={false}
+              />
+          </div>
           ))}
-        </div>
 
 
         <div className="pt-8 border-t border-gray-200">
+            {errorMessage && (
+              <div className="bg-red-100 text-red-700 border border-red-400 px-4 py-2 rounded-lg mb-6">
+                {errorMessage}
+              </div>
+            )}
             <button
               type="submit"
               onClick={handleNext}
-              disabled={isSubmitting}
+              disabled={isSubmitting || errorMessage}
               className={`w-full py-4 px-8 rounded-xl font-bold text-white transition-all duration-200 transform ${
                 isSubmitting
                   ? 'bg-gray-400 cursor-not-allowed'
@@ -253,7 +255,7 @@ function SinglePass() {
                 'Add Passes to Order'
               )}
             </button>
-          </div>
+        </div>
       </div>
   )
 }

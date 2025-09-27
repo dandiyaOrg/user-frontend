@@ -8,6 +8,7 @@ const initialState = {
   eventId: '',
   billingUser: {},
   attendees: {},
+  subevent: {},
 };
 
 export function SessionProvider({ children }) {

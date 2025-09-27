@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import InputField from './InputField';
+import { DatePicker } from "antd";
 import SessionContext from '../SessionContext';
+import dayjs from "dayjs";
+
 
 const BillingUserForm = ({ onSubmit }) => {
 
@@ -19,7 +22,7 @@ const BillingUserForm = ({ onSubmit }) => {
 
   const [errors, setErrors] = useState({})
   const [sameAsMobile, setSameAsMobile] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -28,6 +31,14 @@ const BillingUserForm = ({ onSubmit }) => {
     updateSection("billingUser", { [name]: value })
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }))
+    }
+  }
+
+  const handleDateChange = (date, dateString) => {
+    setFormData(prev => ({ ...prev, dob: dateString })) // store as string
+    updateSection("billingUser", { dob: dateString })
+    if (errors.dob) {
+      setErrors(prev => ({ ...prev, dob: '' }))
     }
   }
 
@@ -63,12 +74,7 @@ const BillingUserForm = ({ onSubmit }) => {
     else if (formData.address.trim().length < 10) newErrors.address = 'Address must be at least 10 characters'
 
     if (!formData.dob) newErrors.dob = 'Date of birth is required'
-    else {
-      const today = new Date()
-      const birthDate = new Date(formData.dob)
-      const age = today.getFullYear() - birthDate.getFullYear()
-      if (age < 13 || age > 100) newErrors.dob = 'Age must be between 13 and 100 years'
-    }
+    
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -133,7 +139,19 @@ const BillingUserForm = ({ onSubmit }) => {
 
             {/* DOB and Gender Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputField
+              <div className="flex flex-col">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Date of Birth <span className="text-red-500">*</span>
+                </label>
+                <DatePicker
+                  name="dob"
+                  value={formData.dob ? dayjs(formData.dob) : null}
+                  onChange={handleDateChange}
+                  className="w-full h-12 px-3 rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-100"
+                  size="large"
+                />
+              </div>
+              {/* <InputField
                 label="Date of Birth"
                 name="dob"
                 type="date"
@@ -146,7 +164,7 @@ const BillingUserForm = ({ onSubmit }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 )}
-              />
+              /> */}
 
               {/* Gender Selection */}
               <div>
@@ -230,8 +248,7 @@ const BillingUserForm = ({ onSubmit }) => {
                   value={formData.whatsapp}
                   onChange={handleChange}
                   error={errors.whatsapp}
-                  disabled={sameAsMobile} // disable if checked
-                  helperText="Leave blank if same as mobile"
+                  disabled={sameAsMobile}
                 />
 
                 {/* Checkbox */}
