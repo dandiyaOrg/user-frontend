@@ -29,7 +29,7 @@ const router = createBrowserRouter(
         <Route path="/GlobalPass" element={<GlobalPass />} />
         <Route path="/Attendees" element={<Attendees />} />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/payment/result" element={<PaymentStatus />}/>
+        <Route path="/payment/status" element={<PaymentStatus />}/>
 
         // EXTRA PAGES
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
